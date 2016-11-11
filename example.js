@@ -1,21 +1,12 @@
-const {addToSequence} = require('./')
+const {addToSequence, findByPath} = require('./')
 
 const travis =
-`# .travis.yml
- language: node_js
- node_js:
-   - '5.4'
-   - '4.4'
- notifications:
-   email: false
- script: npm run travis
- branches:
-   only:
-    - master
-    - develop
-    - /^v[0-9]/
-   except:
-    - what
-`
+`# branches to build
+branches:
+  # whitelist
+  only:
+    - __fake`
+
+findByPath(travis, ['branches', 'only'])
 
 console.log(addToSequence(travis, ['branches', 'only'], '/greenkeeper.*/'))

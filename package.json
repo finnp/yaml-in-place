@@ -4,13 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/"
   },
   "keywords": [],
   "author": "Finn Pauls",
   "license": "ISC",
   "devDependencies": {
-    "standard": "^8.5.0"
+    "standard": "^8.5.0",
+    "tape": "^4.6.2"
   },
   "dependencies": {
     "escape-string-regexp": "^1.0.5",

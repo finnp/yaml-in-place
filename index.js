@@ -1,6 +1,6 @@
 const escape = require('escape-string-regexp')
 const {safeLoad, FAILSAFE_SCHEMA} = require('js-yaml')
-const {get} = require('lodash')
+const {get, isEqual, last, includes} = require('lodash')
 
 function addToSequence (yml, path, newItem) {
   const parsed = safeLoad(yml, {schema: FAILSAFE_SCHEMA})
@@ -8,6 +8,9 @@ function addToSequence (yml, path, newItem) {
   if (!seq) return
   const item = seq[seq.length - 1]
   if (!item) return
+
+  // modify parsed to the goal
+  seq.push(newItem)
 
   const match = findByPath(yml, path)
   if (!match) return // fail hard
@@ -20,14 +23,24 @@ function addToSequence (yml, path, newItem) {
   const spacesBefore = arrayItemResult[2]
 
   const separator = arrayItemResult.index + arrayItemResult[0].length + 1
+  const ymlBefore = yml.slice(0, separator)
+  const addNewline = !includes('\n\r', last(ymlBefore))
 
-  return yml.slice(0, separator) + `${thirdIdent}-${spacesBefore}${newItem}` + yml.slice(separator - 1)
+  const newYml = ymlBefore + (addNewline ? '\n' : '') +
+    `${thirdIdent}-${spacesBefore}${newItem}` +
+    yml.slice(separator - 1)
+
+  const newParsed = safeLoad(newYml, {schema: FAILSAFE_SCHEMA})
+
+  if (!isEqual(parsed, newParsed)) throw new Error('Unexpected result')
+
+  return newYml
 }
 
 function findByPath (yml, path) {
   if (typeof path === 'string') path = path.split('.')
 
-  let indent = 0
+  let indent = -1
   let position = 0
 
   for (let i = 0; i < path.length; i++) {
