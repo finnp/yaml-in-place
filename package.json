@@ -1,0 +1,20 @@
+{
+  "name": "yml-in-place",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Finn Pauls",
+  "license": "ISC",
+  "devDependencies": {
+    "standard": "^8.5.0"
+  },
+  "dependencies": {
+    "escape-string-regexp": "^1.0.5",
+    "js-yaml": "^3.6.1",
+    "lodash": "^4.16.6"
+  }
+}
