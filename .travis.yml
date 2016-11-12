@@ -7,11 +7,8 @@ notifications:
   email: false
 node_js:
   - '4'
-  - iojs-v3
-  - iojs-v2
-  - iojs-v1
-  - '0.12'
-  - '0.10'
+  - '6'
+  - '7'
 before_install:
   - npm i -g npm@^2.0.0
 before_script:
@@ -20,6 +17,7 @@ after_success:
   - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'
   - python travis_after_all.py
   - export $(cat .to_export_back) &> /dev/null
+  - npm run test:coverage
   - npm run semantic-release
 branches:
   except:
