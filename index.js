@@ -1,10 +1,10 @@
 const escape = require('escape-string-regexp')
-const {safeLoad, FAILSAFE_SCHEMA} = require('js-yaml')
-const {get, isEqual, last, includes} = require('lodash')
+const jsyaml = require('js-yaml')
+const _ = require('lodash')
 
 function addToSequence (yml, path, newItem) {
-  const parsed = safeLoad(yml, {schema: FAILSAFE_SCHEMA})
-  const seq = get(parsed, path)
+  const parsed = jsyaml.safeLoad(yml, {schema: jsyaml.FAILSAFE_SCHEMA})
+  const seq = _.get(parsed, path)
   if (!seq) return
   const item = seq[seq.length - 1]
   if (!item) return
@@ -14,7 +14,8 @@ function addToSequence (yml, path, newItem) {
 
   const match = findByPath(yml, path)
   if (!match) return // fail hard
-  const {position, indent} = match
+  const position = match.position
+  const indent = match.indent
 
   const arrayItemResult = findSequenceItem(yml, item, indent, position)
   if (!arrayItemResult) return
@@ -24,15 +25,15 @@ function addToSequence (yml, path, newItem) {
 
   const separator = arrayItemResult.index + arrayItemResult[0].length + 1
   const ymlBefore = yml.slice(0, separator)
-  const addNewline = !includes('\n\r', last(ymlBefore))
+  const addNewline = !_.includes('\n\r', _.last(ymlBefore))
 
   const newYml = ymlBefore + (addNewline ? '\n' : '') +
     `${thirdIdent}-${spacesBefore}${newItem}` +
     yml.slice(separator - 1)
 
-  const newParsed = safeLoad(newYml, {schema: FAILSAFE_SCHEMA})
+  const newParsed = jsyaml.safeLoad(newYml, {schema: jsyaml.FAILSAFE_SCHEMA})
 
-  if (!isEqual(parsed, newParsed)) throw new Error('Unexpected result')
+  if (!_.isEqual(parsed, newParsed)) throw new Error('Unexpected result')
 
   return newYml
 }
@@ -40,10 +41,10 @@ function addToSequence (yml, path, newItem) {
 function findByPath (yml, path) {
   if (typeof path === 'string') path = path.split('.')
 
-  let indent = -1
-  let position = 0
+  var indent = -1
+  var position = 0
 
-  for (let i = 0; i < path.length; i++) {
+  for (var i = 0; i < path.length; i++) {
     const key = path[i]
     const regex = new RegExp(String.raw`^( {${indent + 1},})${escape(key)} *: *$`, 'm')
     regex.lastMatch = position
