@@ -58,7 +58,7 @@ function findByPath (yml, path) {
 }
 
 function findSequenceItem (yml, item, minIndent, fromPosition) {
-  const arrayItemRegex = new RegExp(String.raw`^( {${minIndent + 1},})-( +)${escape(item)} *$`, 'm')
+  const arrayItemRegex = new RegExp(String.raw`^( {${minIndent},})-( +)${escape(item)} *$`, 'm')
   arrayItemRegex.lastIndex = fromPosition
   const arrayItemResult = arrayItemRegex.exec(yml)
   return arrayItemResult
