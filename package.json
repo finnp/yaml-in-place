@@ -12,8 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "coveralls": "^2.11.14",
-    "nyc": "^8.4.0",
-    "semantic-release": "^4.3.5",
+    "nyc": "^10.0.0",
+    "semantic-release": "^6.3.2",
     "standard": "^8.5.0",
     "tape": "^4.6.2"
   },
